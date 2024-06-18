@@ -23,5 +23,5 @@ app.config.from_object("config.ConfigClass")
 
 socketio.init_app(app)
 
-i if name == "main":
+if name == "main":
   socketio.run(app, debug=True, port=5001)

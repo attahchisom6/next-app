@@ -1,7 +1,7 @@
 #!/usr/bin/env/python3
 
-from flask import Bluellprint, request
-from flask_socketIO import SocketIO
+from flask import Blueprint, request
+from flask_socketio import SocketIO
 
 socketio = SocketIO()
 

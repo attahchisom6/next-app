@@ -6,10 +6,9 @@ Communication platform
 
 
 from flask import jsonify, request
-from chatbot_assistant import chat_view
+from chatbot_assistant import chat_view, socketio
 from openai import OpenAI, RateLimitError
-from . import socketio
-from flask_socketIO import emit
+from flask_socketio import emit
 
 
 class REAL_TIME_MESSAGING:
@@ -29,7 +28,7 @@ class REAL_TIME_MESSAGING:
     prompt = f"Classify this message {message}"
     completion = client.ChatCompletion.create(
         model="GPT-4-turbo",
-        messages: [
+        messages=[
           {"role": "system", "content": "I am a classifier assistant for input messages. Answer 'Yes' if {message} is about abstract algebra else anser 'No'"},
           {"role": "user", "content": prompt}
         ]
@@ -38,48 +37,51 @@ class REAL_TIME_MESSAGING:
 
     return res == "Yes"
 
-  @app_view.route('/instant_messaging', methods=["POST"], strict_slashes=False)
-  def instant_messaging():
-    """
-    here a one time request and response is descripted and sent ro user
-    """
-    data = request.get_json()
-    if data:
-      message = data.get("message", "")
-      try:
-        if self.classification(message):
-          completion = self.client.ChatCompletion.create(
-              model="GPT-4-turbo",
-              messages=[
-                {"role": "system", "content": "You are a helpful assistant"},
-                {"role": "user", "content": message}
-              ]
-            )
-          response = completion.choices[0].message["content"]
-      except RateLimitError:
-        response = "Rate limit  exceeded"
-      else:
-        response = "Sorry, i can only help you with matters on abstract algebra"
-    return jsonify(response), 200
 
-  @socketio.on("message", namespace="/chat")
-  def chat_medsage(data):
-    """
-     here a bidirectional communication is established between ioenai and the client
-     """
-     message = data.get("message", "")
-     if self.classification(message):
-       try:
-        completion = self.client.ChatCompletion(
+rtm = REAL_TIME_MESSAGING()
+
+@app_view.route('/instant_messaging', methods=["POST"], strict_slashes=False)
+def instant_messaging():
+  """
+  here a one time request and response is descripted and sent ro user
+  """
+  data = request.get_json()
+  if data:
+    message = data.get("message", "")
+    try:
+      if rtm.classification(message):
+        completion = rtm.client.ChatCompletion.create(
             model="GPT-4-turbo",
             messages=[
-              {"role": "system", "content": "You are a chat assistant"},
+              {"role": "system", "content": "You are a helpful assistant"},
               {"role": "user", "content": message}
-              ]
-            )
+            ]
+          )
         response = completion.choices[0].message["content"]
-       except RateLimitError:
-         response = "Rate limit exceeded"
-       else:
-         "Sorry, i can only help you with matters on abstract algebra"
-    emit("response", {"response": response})
+    except RateLimitError:
+      response = "Rate limit  exceeded"
+    else:
+      response = "Sorry, i can only help you with matters on abstract algebra"
+  return jsonify(response), 200
+
+@socketio.on("message", namespace="/chat")
+def chat_medsage(data):
+  """
+  here a bidirectional communication is established between ioenai and the client
+  """
+  message = data.get("message", "")
+  if rtm.classification(message):
+    try:
+      completion = rtm.client.ChatCompletion(
+        model="GPT-4-turbo",
+        messages=[
+          {"role": "system", "content": "You are a chat assistant"},
+          {"role": "user", "content": message}
+          ]
+        )
+      response = completion.choices[0].message["content"]
+    except RateLimitError:
+      response = "Rate limit exceeded"
+  else:
+    response = "Sorry, i can only help you with matters on abstract algebra"
+  emit("response", {"response": response}, namespace="/chat")
