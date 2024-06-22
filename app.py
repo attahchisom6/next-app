@@ -3,25 +3,10 @@
 """
 The app interface
 """
-from flask import Flask
-from chatbot_assistant import socketio, chat_view
-from flask_cors import CORS
-from dotenv import load_dotenv
+from chatbot_assistant import socketio
+from chatbot_assistant import create_app # app_factory import create_app
 
-app = Flask(__name__)
-app.register_blueprint(chat_view)
+app = create_app()
 
-Cors(
-      app,
-      resources={r"*": {"origins": "/api/v1/*"}}
-    )
-
-#load enviroment variabls
-load_dotenv()
-
-app.config.from_object("config.ConfigClass")
-
-socketio.init_app(app)
-
-if name == "main":
-  socketio.run(app, debug=True, port=5001)
+if __name__ == "__main__":
+  socketio.run(app, debug=True, allow_unsafe_werkzeug=True)

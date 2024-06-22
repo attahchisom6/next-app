@@ -1,14 +1,7 @@
-#!/usr/bin/env/python3
+#!/usr/bin/env python3
 
-from flask import Blueprint, request
-from flask_socketio import SocketIO
-from dotenv import load_dotenv
-
-load_dotenv()
-socketio = SocketIO()
-
-# chat_view = Blueprint("chat_view", __name__, url_prefix="/api/v1")
 from flask import Flask
+from chatbot_assistant import socketio, chat_view
 from flask_cors import CORS
 import os
 
@@ -20,8 +13,6 @@ def create_app():
 
     app = Flask(__name__)
     socketio.init_app(app)
-
-    from chatbot_assistant.chat_app import chat_view
     app.register_blueprint(chat_view)
 
     CORS(
