@@ -12,7 +12,6 @@ def create_app():
     print("OPENAI_API_KEYyy:", os.getenv("OPENAI_API_KEY"))
 
     app = Flask(__name__)
-    socketio.init_app(app)
     app.register_blueprint(chat_view)
 
     CORS(
@@ -23,5 +22,7 @@ def create_app():
     app.config.from_object("config.ConfigClass")
     print(f"DEBUG: {app.config['DEBUG']}")
     print(f"KEY: {app.config['SECRET_KEY']}")
+
+    socketio.init_app(app)
 
     return app
