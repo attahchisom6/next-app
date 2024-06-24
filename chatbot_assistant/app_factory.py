@@ -9,8 +9,6 @@ def create_app():
     """
     manufacture app qith necesarry dependencies initialized
     """
-    print("OPENAI_API_KEYyy:", os.getenv("OPENAI_API_KEY"))
-
     app = Flask(__name__)
     app.register_blueprint(chat_view)
 
@@ -20,8 +18,6 @@ def create_app():
     )
 
     app.config.from_object("config.ConfigClass")
-    print(f"DEBUG: {app.config['DEBUG']}")
-    print(f"KEY: {app.config['SECRET_KEY']}")
 
     socketio.init_app(app)
 

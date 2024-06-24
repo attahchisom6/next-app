@@ -9,6 +9,7 @@ from flask import jsonify, request, Blueprint
 from chatbot_assistant import socketio, chat_view
 from openai import OpenAI, RateLimitError, OpenAIError
 from flask_socketio import emit
+import time
 
 
 class REAL_TIME_MESSAGING:
@@ -30,17 +31,23 @@ class REAL_TIME_MESSAGING:
     group user input messages and only accept those relating to abstract algebra
     """
     prompt = f"Classify this message {message}"
-    completion = self.client.chat.completions.create(
-        model="GPT-4",
-        messages=[
-          {"role": "system",
-            "content": "I am a classifier assistant for input messages. Answer 'Yes' if {message} is about abstract algebra else anser 'No'"},
-          {"role": "user", "content": prompt}
-        ]
-      ).strip()
-    res = completion.choices[0].message["content"]
+    for attempt in range(5):
+      try:
+        completion = self.client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+              {"role": "system",
+              "content": "You are a classifier assistant for user input messages. Answer 'Yes' if {message} is about abstract algebra else anser 'No'"},
+              {"role": "user", "content": prompt}
+            ]
+          ).strip()
+        res = completion.choices[0].message["content"]
+        return res == "Yes"
+      except RateLimitError as e:
+        print(f"Rate limit exceeded: {e}\n Retrying...")
+        time.sleep((2 ** attempt) + (0.5 * attempt))
 
-    return res == "Yes"
+    return False
 
 
 rtm = REAL_TIME_MESSAGING()
@@ -57,7 +64,7 @@ def instant_messaging():
     try:
       if rtm.classification(message):
         completion = rtm.client.chat.completions.create(
-            model="GPT-4",
+            model="gpt-3.5-turbo",
             messages=[
               {"role": "system", "content": "You are a helpful assistant"},
               {"role": "user", "content": message}
@@ -79,7 +86,7 @@ def chat_medsage(data):
   if rtm.classification(message):
     try:
       completion = rtm.client.chat.completions(
-        model="GPT-4",
+        model="gpt-3.5-turbo",
         messages=[
           {"role": "system", "content": "You are a chat assistant"},
           {"role": "user", "content": message}
