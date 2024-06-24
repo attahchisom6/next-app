@@ -31,23 +31,20 @@ class REAL_TIME_MESSAGING:
     group user input messages and only accept those relating to abstract algebra
     """
     prompt = f"Classify this message {message}"
-    for attempt in range(5):
-      try:
-        completion = self.client.chat.completions.create(
-            model="gpt-3.5-turbo",
-            messages=[
-              {"role": "system",
+    try:
+      completion = self.client.chat.completions.create(
+          model="gpt-3.5-turbo",
+          messages=[
+            {"role": "system",
               "content": "You are a classifier assistant for user input messages. Answer 'Yes' if {message} is about abstract algebra else anser 'No'"},
-              {"role": "user", "content": prompt}
-            ]
-          ).strip()
-        res = completion.choices[0].message["content"]
-        return res == "Yes"
-      except RateLimitError as e:
-        print(f"Rate limit exceeded: {e}\n Retrying...")
-        time.sleep((2 ** attempt) + (0.5 * attempt))
+            {"role": "user", "content": prompt}
+          ]
+        ).strip()
+      res = completion.choices[0].message["content"]
+    except RateLimitError as e:
+      res = f"Rate limit exceeded: {e}\n Retrying..."
 
-    return False
+    return res
 
 
 rtm = REAL_TIME_MESSAGING()
@@ -71,10 +68,12 @@ def instant_messaging():
             ]
           )
         response = completion.choices[0].message["content"]
-    except RateLimitError:
-      response = "Rate limit  exceeded"
+      else:
+        response = "Sorry, i can only help you with matters on abstract algebra"
+    except RateLimitError as e:
+      response = f"Rate limit  exceeded: {e}"
     else:
-      response = "Sorry, i can only help you with matters on abstract algebra"
+      response = "No daata provided, pls provide a mathematical data"
   return jsonify(response), 200
 
 @socketio.on("message", namespace="/chat")
