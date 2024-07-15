@@ -1,13 +1,13 @@
-import ReactNode from "react";
+import { ReactNode } from "react";
 import sectionStyle from  "../styles/Section.module.css";
 import { Interface } from "readline";
 
-Interface sectionProps {
+interface sectionProps {
     text: string,
     children: ReactNode
 }
 
-const Section = {{text, children}}) => {
+const Section = ({text, children}) => {
     return (
         <div className={sectionStyle}>
             <h2>{text</h2>
