@@ -9,10 +9,10 @@ interface sectionProps {
 
 const Section = ({text, children}) => {
     return (
-        <div className={sectionStyle}>
+        <section className={sectionStyle}>
             <h2>{text</h2>
             {children}
-        </div>
+        </section>
     )
 }
 
