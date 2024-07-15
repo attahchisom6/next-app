@@ -6,7 +6,7 @@ interface headerProps {
 
 const Header = ({ text }: headerProps) => {
     return (
-        <header className={headerStyle}>
+        <header className={headerStyle.header}>
             <h1>{text}</h1>
         </header>
     );

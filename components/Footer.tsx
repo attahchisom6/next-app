@@ -1,6 +1,5 @@
-import { Children, ReactNode } from "react";
+import { ReactNode } from "react";
 import  footerStyle from "../styles/Footer.module.css";
-import { Chicle } from "next/font/google";
 
 interface footerProps {
     children: ReactNode;
@@ -8,7 +7,7 @@ interface footerProps {
 
 const Footer = ({children}: footerProps) => {
     return (
-        <footer className={footerStyle}>
+        <footer className={footerStyle.footer}>
             {children}
         </footer>
     )

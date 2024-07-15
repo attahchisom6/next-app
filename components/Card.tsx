@@ -7,7 +7,7 @@ interface cardProps {
 
 const Card = ({children}: cardProps) => {
     return (
-        <div className={cardStyle}>
+        <div className={cardStyle.card}>
             {children}
         </div>
     );

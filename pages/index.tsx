@@ -1,5 +1,5 @@
 import Head from "next/head";
-import styles from "../styles/globals.css";
+import styles from "../styles/globals.module.css";
 import Header from "@/components/Header";
 import Section from "@/components/Section";
 import Card from "@/components/Card";
@@ -25,7 +25,7 @@ const Home = () => {
                     <Card>
                         <p>Small-scale business registration</p>
                         <p>Large-scale business registration</p>
-                    </Catd>
+                    </Card>
                 </Section>
                 <Section text="Consultancy">
                     <Card>
@@ -33,7 +33,7 @@ const Home = () => {
                         <p>We offer counsel on how to optimize your business for greater success.</p>
                     </Card>
                 </Section>
-                <Section>
+                <Section text="">
                     <Card>
                         <button className={styles.button} onClick={() => alert('Redirect to registration page')}>
                             Get Started
