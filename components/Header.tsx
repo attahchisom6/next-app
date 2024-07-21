@@ -9,9 +9,9 @@ const ids = ["hero", "services", "works", "about",  "vlog", "testimonials", "con
 const Header = ({theme}: headerProps) => {
   return (
     <div className="container">
-      <header className={headerStyle.header} theme={theme}>
+      <header className={headerStyle.header} data-section-theme={theme}>
         <div class={headerStyle.header-logo}>
-          <img src="header-logo.png">
+          <img src="../public/favour-cac-logo.jpg">
         </div>
         <input className={headerStyle.menu-button} id={menu-btn}>
         <label className={headerStyle.menu-icon} htmlFor={menu-btn}>
@@ -21,3 +21,6 @@ const Header = ({theme}: headerProps) => {
       </header>
     </div>
   );
+}
+
+export default Header;

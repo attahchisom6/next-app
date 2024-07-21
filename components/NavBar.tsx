@@ -1,23 +1,27 @@
-import navStyle from "../styles/NavStyles.css"
-import NavSearchItem from "."
+import React from "react";
+import navStyle from "../styles/NavStyles.module.css";
+import NavSearchItem from "./NavSearchItem";
 
-interface navProps {
-  list: [];
+interface NavProps {
+    list: string[]; // or list: Array<string>;
 }
 
-const NavBar = ({list}: navProps) => {
-  return (
-    <>
-      <ul class={navStyle.navbar}>
-        {list && list.map((item) => {
-          <li class={navStyle.nav-item}>
-            <a href={`#$item`}>item.toUppercase()</a>
-          </li>
-        })}
-      </ul>
-      <NavSearchItem text="search through site content" />
-    </>
-  )
+const NavBar = ({ list }: NavProps) => {
+    return (
+        <>
+            <ul className={navStyle.navbar}>
+                {list.map((item, index) => (
+                    <li key={index} className={navStyle['nav-item']}>
+                        <a className={navStyle['nav-link']} href={`#${item}`}>
+                            {item}
+                        </a>
+                    </li>
+                ))}
+            </ul>
+            <NavSearchItem ariaLabel="Search through site content" />
+        </>
+    );
 }
 
-export default NavBar
+export default NavBar;
+

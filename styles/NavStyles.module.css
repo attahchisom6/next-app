@@ -1,0 +1,16 @@
+.navbar {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: space-between;
+}
+
+.nav-item {}
+
+.nav-link {}
+
+.navicon {}
+
+.nsv-button {}
+
+.form-search {}
