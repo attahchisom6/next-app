@@ -15,10 +15,10 @@ const NavBar = ({ list }: NavProps) => {
                         <a className={navStyle['nav-link']} href={`#${item}`}>
                             {item}
                         </a>
+                        <NavSearchItem ariaLabel="Search through site" />
                     </li>
                 ))}
             </ul>
-            <NavSearchItem ariaLabel="Search through site content" />
         </>
     );
 }

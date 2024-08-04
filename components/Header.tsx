@@ -1,7 +1,7 @@
 
 import React from "react";
 import headerStyle from "../styles/HeaderStyle.module.css";
-import styles from "../styles/globals.module.css";
+import styles from "../styles/globals.css";
 import navStyle from "../styles/NavStyles.module.css";
 import NavBar from "./NavBar"; // Import NavBar component
 
